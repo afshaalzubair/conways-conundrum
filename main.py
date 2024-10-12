@@ -49,7 +49,7 @@ def get_color(age):
     return color
 
 def generate(num):
-    return {(random.randrange(0, GRID_HEIGHT), random.randrange(0, GRID_WIDTH)): 1 for i in range(num)}
+    return {(random.randrange(0, GRID_WIDTH), random.randrange(0, GRID_HEIGHT)): 1 for i in range(num)}
 
 def draw_grid(positions, show_grid):
     for position, age in positions.items():
