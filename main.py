@@ -13,12 +13,12 @@ Rules of Conway's Game of Life:
 
 pygame.init()
 
-LINE_COLOR = (0, 0, 0)
-BG_COLOR = (128, 128, 128)
-TILE_COLOR = (255, 255, 0)
+LINE_COLOR = (88, 0, 240)
+BG_COLOR = (0, 0, 0)
+TILE_COLOR = (170, 128, 242)
 
-WIDTH, HEIGHT = 800, 800
-TILE_SIZE = 2
+WIDTH, HEIGHT = 1000, 1000
+TILE_SIZE = 5
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
 FPS = 60 # Experimental Parameter
@@ -96,12 +96,11 @@ def get_neighbors(pos):
 
     return neighbors
 
-
 def main():
     running = True
     playing = False
     count = 0
-    update_freq = 5 # Experimental Parameter
+    update_freq = 1 # Experimental Parameter
 
     positions = set()
 
@@ -142,10 +141,7 @@ def main():
                     count = 0
 
                 if event.key == pygame.K_g:
-                    positions = generate(random.randrange(200, 400) * GRID_WIDTH)
-
-                
-
+                    positions = generate(random.randrange(100, 200) * GRID_WIDTH)               
 
         screen.fill(BG_COLOR)
         draw_grid(positions)
