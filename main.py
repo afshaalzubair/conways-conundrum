@@ -13,11 +13,11 @@ Rules of Conway's Game of Life:
 
 pygame.init()
 
-LINE_COLOR = (25, 25, 25)
+LINE_COLOR = (20, 20, 20)
 BG_COLOR = (0, 0, 0)
 
-WIDTH, HEIGHT = 1002, 1002
-TILE_SIZE = 3
+WIDTH, HEIGHT = 1000, 1000
+TILE_SIZE = 2
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
 FPS = 60 # Experimental Parameter
@@ -30,6 +30,7 @@ def get_color(age):
     white = (255, 255, 255)
     green = (0, 255, 0)
     red = (255, 0, 0)
+    yellow = (255, 255, 0)
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
     young_color = black
@@ -81,8 +82,8 @@ def adjust_grid(positions):
         # Filter only for live cells
         live_neighbors = list(filter(lambda x: x in positions, neighbors))
 
-        # If live cell amount is 2 or 3, keep cell position
-        if len(live_neighbors) in [2, 3]:
+        # If live cell amount is 2 or 3, (or experimental value) keep cell position
+        if len(live_neighbors) in [2, 3]: # Experimental Parameter
             new_positions[position] = age + 1
 
     # Loop through all neighbors of live cells
@@ -125,6 +126,7 @@ def main():
     show_grid = True
     count = 0
     update_freq = 1 # Experimental Parameter
+    randomness = random.randrange(100, 200) # Experimental Parameter
     positions = {}
 
     while running:
@@ -167,7 +169,7 @@ def main():
 
                 # Press g to generate cells
                 if event.key == pygame.K_g:
-                    positions = generate(random.randrange(100, 200) * GRID_WIDTH)
+                    positions = generate(randomness * GRID_WIDTH)
 
                 # Press h to toggle grid on/off
                 if event.key == pygame.K_h:
