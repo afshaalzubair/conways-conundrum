@@ -13,12 +13,11 @@ Rules of Conway's Game of Life:
 
 pygame.init()
 
-LINE_COLOR = (88, 0, 240)
+LINE_COLOR = (25, 25, 25)
 BG_COLOR = (0, 0, 0)
-TILE_COLOR = (170, 128, 242)
 
-WIDTH, HEIGHT = 1000, 1000
-TILE_SIZE = 5
+WIDTH, HEIGHT = 1002, 1002
+TILE_SIZE = 3
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
 FPS = 60 # Experimental Parameter
@@ -26,51 +25,75 @@ FPS = 60 # Experimental Parameter
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
-def generate(num):
-    return set([(random.randrange(0, GRID_HEIGHT), random.randrange(0, GRID_WIDTH)) for i in range(num)])
+def get_color(age):
+    black = (0, 0, 0)
+    white = (255, 255, 255)
+    green = (0, 255, 0)
+    red = (255, 0, 0)
+    rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
-def draw_grid(positions):
-    for position in positions:
+    young_color = black
+    old_color = white
+
+    max_age = 5 # Experimental Parameter
+    age = min(age, max_age)
+
+    ratio = age / max_age
+    color = (
+        int(young_color[0] * (1 - ratio) + old_color[0] * ratio),
+        int(young_color[1] * (1 - ratio) + old_color[1] * ratio),
+        int(young_color[2] * (1 - ratio) + old_color[2] * ratio)
+    )
+
+    return color
+
+def generate(num):
+    return {(random.randrange(0, GRID_HEIGHT), random.randrange(0, GRID_WIDTH)): 1 for i in range(num)}
+
+def draw_grid(positions, show_grid):
+    for position, age in positions.items():
         col, row = position
         top_left = (col * TILE_SIZE, row * TILE_SIZE)
-        pygame.draw.rect(screen, TILE_COLOR, (*top_left, TILE_SIZE, TILE_SIZE))
+        color = get_color(age)
+        pygame.draw.rect(screen, color, (*top_left, TILE_SIZE, TILE_SIZE))
 
-    for row in range(GRID_HEIGHT):
-        pygame.draw.line(screen, LINE_COLOR, (0, row * TILE_SIZE), (WIDTH, row * TILE_SIZE))
+    if show_grid:
+        for row in range(GRID_HEIGHT):
+            pygame.draw.line(screen, LINE_COLOR, (0, row * TILE_SIZE), (WIDTH, row * TILE_SIZE))
 
-    for col in range(GRID_WIDTH):
-        pygame.draw.line(screen, LINE_COLOR, (col * TILE_SIZE, 0), (col * TILE_SIZE, HEIGHT))    
+        for col in range(GRID_WIDTH):
+            pygame.draw.line(screen, LINE_COLOR, (col * TILE_SIZE, 0), (col * TILE_SIZE, HEIGHT))  
 
 def adjust_grid(positions):
 
     # Stores all neighbors of all live cells of the current set of positions
     all_neighbors = set()
-    # What is updated after adjust_grid
-    new_positions = set()
+    # Updated after adjust_grid
+    new_positions = {}
 
     # Going through live cells
-    for position in positions: 
+    for position, age in positions.items(): 
         # Get neighboring coordinates
         neighbors = get_neighbors(position)
         # Update neighbors for later use
         all_neighbors.update(neighbors)
 
         # Filter only for live cells
-        neighbors = list(filter(lambda x: x in positions, neighbors))
+        live_neighbors = list(filter(lambda x: x in positions, neighbors))
 
         # If live cell amount is 2 or 3, keep cell position
-        if len(neighbors) in [2, 3]:
-            new_positions.add(position)
+        if len(live_neighbors) in [2, 3]:
+            new_positions[position] = age + 1
 
     # Loop through all neighbors of live cells
     for position in all_neighbors:
         neighbors = get_neighbors(position)
         # Check live neighbors of live neighbors
-        neighbors = list(filter(lambda x: x in positions, neighbors))
+        live_neighbors = list(filter(lambda x: x in positions, neighbors))
 
         # If they have three live neighbors, alive the adjacent cell
-        if len(neighbors) == 3:
-            new_positions.add(position)
+        if len(live_neighbors) == 3 and position not in new_positions:
+            new_positions[position] = 1
 
     return new_positions
 
@@ -99,10 +122,10 @@ def get_neighbors(pos):
 def main():
     running = True
     playing = False
+    show_grid = True
     count = 0
     update_freq = 1 # Experimental Parameter
-
-    positions = set()
+    positions = {}
 
     while running:
         clock.tick(FPS)
@@ -127,24 +150,32 @@ def main():
                 pos = (col, row)
 
                 if pos in positions:
-                    positions.remove(pos)
+                    del positions[pos]
                 else:
-                    positions.add(pos)
+                    positions[pos] = 1
 
             if event.type == pygame.KEYDOWN:
+                # Press space to pause/play
                 if event.key == pygame.K_SPACE:
                     playing = not playing
                 
+                # Press c to clear board
                 if event.key == pygame.K_c:
-                    positions = set()
+                    positions = {}
                     playing = False
                     count = 0
 
+                # Press g to generate cells
                 if event.key == pygame.K_g:
-                    positions = generate(random.randrange(100, 200) * GRID_WIDTH)               
+                    positions = generate(random.randrange(100, 200) * GRID_WIDTH)
+
+                # Press h to toggle grid on/off
+                if event.key == pygame.K_h:
+                    show_grid = not show_grid
+
 
         screen.fill(BG_COLOR)
-        draw_grid(positions)
+        draw_grid(positions, show_grid)
         pygame.display.update()
 
     pygame.quit()
