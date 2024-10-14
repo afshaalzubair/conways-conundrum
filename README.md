@@ -11,3 +11,4 @@ List of features to add:
     - Nearby live cell amount to keep cell (1-8)
     - Generation (g) randomness
 - Cell death from aging
+- Add json file for default experimental parameters
