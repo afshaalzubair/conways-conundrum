@@ -3,7 +3,7 @@
 List of features to add:
 - Openable controls menu
 - Openable interactive statistics menu
-- Default RGB colors imported from a file
+- ~~Default RGB colors imported from a file~~
 - Ability for user to set experimental parameters
     - Speed control to change the update_freq parameter
     - Customizable grid size
