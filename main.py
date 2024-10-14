@@ -19,12 +19,19 @@ with open("colors.json", "r") as file:
 
 LINE_COLOR = tuple(COLORS["LINE_COLOR"])
 BG_COLOR = tuple(COLORS["BLACK"])
-
 WIDTH, HEIGHT = 1002, 1002
 TILE_SIZE = 2
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
-FPS = 60 # Experimental Parameter
+
+##### EXPERIMENTAL PARAMETERS #####
+FPS = 60 
+UPDATE_FREQ = 1
+MAX_AGE = 5
+SURVIVAL_CELL_AMOUNT = [2, 3]
+REPRODUCTION_CELL_AMOUNT = [3, 4]
+RANDOMNESS = random.randrange(100, 200)
+##### ##### ##### ##### ##### #####
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -32,13 +39,12 @@ clock = pygame.time.Clock()
 def get_color(age):
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
-    young_color = tuple(COLORS["YELLOW"])
-    old_color = tuple(COLORS["BLACK"])
+    young_color = tuple(COLORS["BLACK"])
+    old_color = tuple(COLORS["WHITE"])
 
-    max_age = 10 # Experimental Parameter
-    age = min(age, max_age)
+    age = min(age, MAX_AGE)
 
-    ratio = age / max_age
+    ratio = age / MAX_AGE
     color = (
         int(young_color[0] * (1 - ratio) + old_color[0] * ratio),
         int(young_color[1] * (1 - ratio) + old_color[1] * ratio),
@@ -82,7 +88,7 @@ def adjust_grid(positions):
         live_neighbors = list(filter(lambda x: x in positions, neighbors))
 
         # If live cell amount is 2 or 3, (or experimental value) keep cell position
-        if len(live_neighbors) in [2, 3]: # Experimental Parameter
+        if len(live_neighbors) in SURVIVAL_CELL_AMOUNT: 
             new_positions[position] = age + 1
 
     # Loop through all neighbors of live cells
@@ -91,8 +97,8 @@ def adjust_grid(positions):
         # Check live neighbors of live neighbors
         live_neighbors = list(filter(lambda x: x in positions, neighbors))
 
-        # If they have three live neighbors, alive the adjacent cell
-        if len(live_neighbors) == 3 and position not in new_positions:
+        # If they have three live neighbors (or experimental number of neighbors), alive the adjacent cell
+        if len(live_neighbors) in REPRODUCTION_CELL_AMOUNT and position not in new_positions:
             new_positions[position] = 1
 
     return new_positions
@@ -124,8 +130,6 @@ def main():
     playing = False
     show_grid = True
     count = 0
-    update_freq = 1 # Experimental Parameter
-    randomness = random.randrange(100, 200) # Experimental Parameter
     positions = {}
 
     while running:
@@ -134,7 +138,7 @@ def main():
         if playing:
             count += 1
 
-        if count >= update_freq:
+        if count >= UPDATE_FREQ:
             count = 0
             positions = adjust_grid(positions)
 
@@ -168,7 +172,7 @@ def main():
 
                 # Press g to generate cells
                 if event.key == pygame.K_g:
-                    positions = generate(randomness * GRID_WIDTH)
+                    positions = generate(RANDOMNESS * GRID_WIDTH)
 
                 # Press h to toggle grid on/off
                 if event.key == pygame.K_h:
