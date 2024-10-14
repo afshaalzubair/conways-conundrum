@@ -4,7 +4,6 @@ List of features to add:
 - Openable controls menu
 - Openable interactive statistics menu
 - Openable rules/explanation menu explaining the basics of CGOL
-- ~~Default RGB colors imported from a file~~
 - Ability for user to set experimental parameters
     - Speed control to change the update_freq parameter
     - Customizable grid size
@@ -13,3 +12,7 @@ List of features to add:
     - Generation (g) randomness
 - Cell death from aging
 - Add json file for default experimental parameters
+
+Completed features:
+- ~~Color gradient and age function of cell~~
+- ~~Default RGB colors imported from a file~~
