@@ -14,8 +14,9 @@ Rules of Conway's Game of Life:
 
 pygame.init()
 
-with open("colors.json", "r") as file:
-    COLORS = json.load(file)
+with open("data/colors.json", "r") as color_file, open("data/defaultparameters.json", "r") as param_file:
+    COLORS = json.load(color_file)
+    DEF_PARAMS = json.load(param_file)
 
 LINE_COLOR = tuple(COLORS["LINE_COLOR"])
 BG_COLOR = tuple(COLORS["BLACK"])
@@ -29,7 +30,7 @@ FPS = 60
 UPDATE_FREQ = 1
 MAX_AGE = 3
 SURVIVAL_CELL_AMOUNT = [2, 3]
-REPRODUCTION_CELL_AMOUNT = [3, 4] # Default is 3
+REPRODUCTION_CELL_AMOUNT = [3] # Default is 3
 GENERATION_RANDOMNESS = random.randrange(100, 200)
 ##### ##### ##### ##### ##### #####
 
