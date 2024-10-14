@@ -29,8 +29,8 @@ FPS = 60
 UPDATE_FREQ = 1
 MAX_AGE = 5
 SURVIVAL_CELL_AMOUNT = [2, 3]
-REPRODUCTION_CELL_AMOUNT = [3, 4]
-RANDOMNESS = random.randrange(100, 200)
+REPRODUCTION_CELL_AMOUNT = [3, 4] # Default is 3
+GENERATION_RANDOMNESS = random.randrange(100, 200)
 ##### ##### ##### ##### ##### #####
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -71,23 +71,22 @@ def draw_grid(positions, show_grid):
             pygame.draw.line(screen, LINE_COLOR, (col * TILE_SIZE, 0), (col * TILE_SIZE, HEIGHT))  
 
 def adjust_grid(positions):
-
-    # Stores all neighbors of all live cells of the current set of positions
+    # Stores positions of all neighbors of all live cells of the current cycle of positions
     all_neighbors = set()
-    # Updated after adjust_grid
+    # Updated after adjust_grid, stores positions and age of the cells that need to be updated after cycle
     new_positions = {}
 
-    # Going through live cells
+    # Loop through the position and age of all live cells
     for position, age in positions.items(): 
         # Get neighboring coordinates
         neighbors = get_neighbors(position)
-        # Update neighbors for later use
+        # Add set of coordinates to all_neighbors
         all_neighbors.update(neighbors)
 
         # Filter only for live cells
         live_neighbors = list(filter(lambda x: x in positions, neighbors))
 
-        # If live cell amount is 2 or 3, (or experimental value) keep cell position
+        # If live cell amount is 2 or 3, (or experimental value) keep cell position; determined by the length (num) of coordinates in live_neighbors
         if len(live_neighbors) in SURVIVAL_CELL_AMOUNT: 
             new_positions[position] = age + 1
 
@@ -106,7 +105,6 @@ def adjust_grid(positions):
 def get_neighbors(pos):
 
     # 8 possible neighbors
-
     x, y = pos
     neighbors = []
     # Loop through nine possible positions using x/y displacement, if 0, 0, ignore
@@ -172,12 +170,11 @@ def main():
 
                 # Press g to generate cells
                 if event.key == pygame.K_g:
-                    positions = generate(RANDOMNESS * GRID_WIDTH)
+                    positions = generate(GENERATION_RANDOMNESS * GRID_WIDTH)
 
                 # Press h to toggle grid on/off
                 if event.key == pygame.K_h:
                     show_grid = not show_grid
-
 
         screen.fill(BG_COLOR)
         draw_grid(positions, show_grid)
