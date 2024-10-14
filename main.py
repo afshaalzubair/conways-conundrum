@@ -1,5 +1,6 @@
 import pygame
 import random
+import json
 
 """
 Rules of Conway's Game of Life:
@@ -13,10 +14,13 @@ Rules of Conway's Game of Life:
 
 pygame.init()
 
-LINE_COLOR = (20, 20, 20)
-BG_COLOR = (0, 0, 0)
+with open("colors.json", "r") as file:
+    COLORS = json.load(file)
 
-WIDTH, HEIGHT = 1000, 1000
+LINE_COLOR = tuple(COLORS["LINE_COLOR"])
+BG_COLOR = tuple(COLORS["BLACK"])
+
+WIDTH, HEIGHT = 1002, 1002
 TILE_SIZE = 2
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
@@ -26,17 +30,12 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 def get_color(age):
-    black = (0, 0, 0)
-    white = (255, 255, 255)
-    green = (0, 255, 0)
-    red = (255, 0, 0)
-    yellow = (255, 255, 0)
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
-    young_color = black
-    old_color = white
+    young_color = tuple(COLORS["YELLOW"])
+    old_color = tuple(COLORS["BLACK"])
 
-    max_age = 5 # Experimental Parameter
+    max_age = 10 # Experimental Parameter
     age = min(age, max_age)
 
     ratio = age / max_age
