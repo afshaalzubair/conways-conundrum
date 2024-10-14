@@ -3,6 +3,7 @@
 List of features to add:
 - Openable controls menu
 - Openable interactive statistics menu
+- Openable rules/explanation menu explaining the basics of CGOL
 - ~~Default RGB colors imported from a file~~
 - Ability for user to set experimental parameters
     - Speed control to change the update_freq parameter
