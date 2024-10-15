@@ -11,8 +11,8 @@ List of features to add:
     - Nearby live cell amount to keep cell (1-8)
     - Generation (g) randomness
 - Cell death from aging
-- Add json file for default experimental parameters
 
 Completed features:
 - ~~Color gradient and age function of cell~~
 - ~~Default RGB colors imported from a file~~
+- ~~Add json file for default experimental parameters~~
