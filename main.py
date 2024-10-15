@@ -18,21 +18,36 @@ with open("data/colors.json", "r") as color_file, open("data/defaultparameters.j
     COLORS = json.load(color_file)
     DEF_PARAMS = json.load(param_file)
 
+use_default_parameters = False
+
+if not (use_default_parameters):
+    ##### EXPERIMENTAL PARAMETERS #####
+    WIDTH, HEIGHT = 1002, 1002
+    TILE_SIZE = 3
+    FPS = 60 
+    UPDATE_FREQ = 1
+    MAX_AGE = 3
+    SURVIVAL_CELL_AMOUNT = [2, 3]
+    REPRODUCTION_CELL_AMOUNT = [3]
+    ##### ##### ##### ##### ##### #####
+else:
+    #####    DEFAULT PARAMETERS   #####
+    WIDTH = DEF_PARAMS["WIDTH"]
+    HEIGHT = DEF_PARAMS["HEIGHT"]
+    TILE_SIZE = DEF_PARAMS["TILE_SIZE"]
+    FPS = DEF_PARAMS["FPS"]
+    UPDATE_FREQ = DEF_PARAMS["UPDATE_FREQ"]
+    MAX_AGE = DEF_PARAMS["MAX_AGE"]
+    SURVIVAL_CELL_AMOUNT = tuple(DEF_PARAMS["SURVIVAL_CELL_AMOUNT"])
+    REPRODUCTION_CELL_AMOUNT = tuple(DEF_PARAMS["REPRODUCTION_CELL_AMOUNT"])
+    ##### ##### ##### ##### ##### #####
+
+# CONTROL PARAMETERS
 LINE_COLOR = tuple(COLORS["LINE_COLOR"])
 BG_COLOR = tuple(COLORS["BLACK"])
-WIDTH, HEIGHT = 1002, 1002
-TILE_SIZE = 1
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
-
-##### EXPERIMENTAL PARAMETERS #####
-FPS = 60 
-UPDATE_FREQ = 1
-MAX_AGE = 3
-SURVIVAL_CELL_AMOUNT = [2, 3]
-REPRODUCTION_CELL_AMOUNT = [3] # Default is 3
-GENERATION_RANDOMNESS = random.randrange(100, 200)
-##### ##### ##### ##### ##### #####
+GENERATION_RANDOMNESS = random.randrange(int((0.1 * ((WIDTH + HEIGHT) / 2))), int((0.2 * ((WIDTH + HEIGHT) / 2))))
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
