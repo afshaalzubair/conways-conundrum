@@ -27,8 +27,8 @@ if not (use_default_parameters):
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 3
-    SURVIVAL_CELL_AMOUNT = [2, 3]
-    REPRODUCTION_CELL_AMOUNT = [3, 4]
+    SURVIVAL_CELL_AMOUNT = [3, 4, 5]
+    REPRODUCTION_CELL_AMOUNT = [3]
     ##### ##### ##### ##### ##### #####
 else:
     #####    DEFAULT PARAMETERS   #####
@@ -144,7 +144,7 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
     population_density = num_live_cells / (GRID_WIDTH * GRID_HEIGHT)
     average_age = sum(positions.values()) / num_live_cells if num_live_cells > 0 else 0
     survival_rate = (num_live_cells / previous_live_cell_count) * 100 if previous_live_cell_count > 0 else 0
-    
+
     statistics = {
         "Generation": generation_count,
         "Live Cells": num_live_cells,
@@ -156,10 +156,11 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
     return statistics
 
 def draw_statistics(statistics):
+    pygame.draw.rect(screen, tuple(COLORS["SLATEGRAY"]), (0, 0, (WIDTH * 0.25), (HEIGHT * 0.12)))
     font = pygame.font.Font(None, 25)
     y_offset = 10
     for name, value in statistics.items():
-        text = font.render(f"{name}: {value}", True, tuple(COLORS["PERU"]))
+        text = font.render(f"{name}: {value}", True, tuple(COLORS["BLACK"]))
         screen.blit(text, (10, y_offset))
         y_offset += 20
 
