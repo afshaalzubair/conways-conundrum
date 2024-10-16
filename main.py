@@ -27,7 +27,7 @@ if not (use_default_parameters):
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 3
-    SURVIVAL_CELL_AMOUNT = [2, 3, 4]
+    SURVIVAL_CELL_AMOUNT = [2, 3]
     REPRODUCTION_CELL_AMOUNT = [3]
     ##### ##### ##### ##### ##### #####
 else:
@@ -56,7 +56,7 @@ def get_color(age):
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
     young_color = tuple(COLORS["BLACK"])
-    old_color = tuple(COLORS["WHITE"])
+    old_color = rainbow
 
     age = min(age, MAX_AGE)
 
@@ -142,7 +142,8 @@ def get_neighbors(pos):
 def calculate_statistics(positions, generation_count, previous_live_cell_count):
     num_live_cells = len(positions)
     population_density = num_live_cells / (GRID_WIDTH * GRID_HEIGHT)
-    average_age = sum(positions.values()) / num_live_cells if num_live_cells > 0 else 0
+    total_age = sum(min(age, MAX_AGE) for age in positions.values())
+    average_age = total_age / num_live_cells if num_live_cells > 0 else 0
     survival_rate = (num_live_cells / previous_live_cell_count) * 100 if previous_live_cell_count > 0 else 0
 
     statistics = {
@@ -156,16 +157,57 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
     return statistics
 
 def draw_statistics(statistics):
-    box_position = (15, 15, (WIDTH * 0.25), (HEIGHT * 0.12))
+
+    # Title Box
+    tbox_x = 60
+    tbox_y = 10
+    tbox_width = (WIDTH * 0.15)
+    tbox_height = (HEIGHT * 0.04)
+    tbox_position = (tbox_x, tbox_y, tbox_width, tbox_height)
+    pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), tbox_position)
+
+    # Title Border
+    tborder_thickness = 5
+    tborder_position = (
+        tbox_x - tborder_thickness,
+        tbox_y - tborder_thickness,
+        tbox_width + tborder_thickness,
+        tbox_height + tborder_thickness
+    )
+    pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), tborder_position, tborder_thickness)
+
+    # Title Text
+    font_size = 25
+    font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
+    title = font.render("Statistics", True, tuple(COLORS["BLACK"]))
+    screen.blit(title, (tbox_x + 17, tbox_y + 10))
+
+    # Stats Box
+    box_x = 15
+    box_y = 65
+    box_width = (WIDTH * 0.25)
+    box_height = (HEIGHT * 0.12)
+    box_position = (box_x, box_y, box_width, box_height)
     pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), box_position)
+
+    # Stats Border
     border_thickness = 10
-    border_position = (5, 5, (WIDTH * 0.25 + border_thickness), (WIDTH * 0.12 + border_thickness))
+    border_position = (
+        box_x - border_thickness,
+        box_y - border_thickness,
+        box_width + border_thickness,
+        box_height + border_thickness
+    )
     pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), border_position, border_thickness)
-    font = pygame.font.Font("fonts/Minecraft.ttf", 14)
-    y_offset = 25
+
+    # Stats Text
+    font_size = 14
+    font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
+    x_offset = box_x + 10
+    y_offset = box_y + 10
     for name, value in statistics.items():
         text = font.render(f"{name}: {value}", True, tuple(COLORS["BLACK"]))
-        screen.blit(text, (25, y_offset))
+        screen.blit(text, (x_offset, y_offset))
         y_offset += 20
 
 def draw_controls():
@@ -224,10 +266,11 @@ def draw_controls():
     # Main Text
     font_size = 25
     font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
+    x_offset = box_x + 10
     y_offset = box_y + 10
     for control, value in controls.items():
         text = font.render(f"{control} {value}", True, tuple(COLORS["BLACK"]))
-        screen.blit(text, (box_x + 10, y_offset))
+        screen.blit(text, (x_offset, y_offset))
         y_offset += 30
 
 def draw_introduction():
@@ -259,7 +302,7 @@ def main():
             positions = adjust_grid(positions)
             generation += 1
 
-        pygame.display.set_caption("Playing" if playing else "Paused")
+        pygame.display.set_caption("Conway's Game of Life - Playing" if playing else "Conways Game of Life - Paused")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
