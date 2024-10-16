@@ -176,6 +176,7 @@ def draw_controls():
         "Clear Board:": "            C",
         "Toggle Grid:": "             H",
         "Toggle Stats:": "            S"
+        # add toggle intro menu
     }
 
     font = pygame.font.Font("fonts/Minecraft.ttf", 25)
@@ -210,7 +211,8 @@ def main():
     playing = False
     show_grid = True
     show_stats = False
-    show_controls = True
+    show_controls = False
+    show_intro = True
     count = 0
     positions = {}
 
@@ -267,12 +269,17 @@ def main():
                 if event.key == pygame.K_h:
                     show_grid = not show_grid
 
-                # Press s to toggle game statistics on/off
+                # Press s to toggle game statistics panel
                 if event.key == pygame.K_s:
                     show_stats = not show_stats
 
+                # Press t to toggle controls menu
                 if event.key == pygame.K_t:
                     show_controls = not show_controls
+
+                # Press e to toggle intro menu
+                if event.key == pygame.K_e:
+                    show_intro = not show_intro
         
         screen.fill(BG_COLOR)
         draw_grid(positions, show_grid)
@@ -283,6 +290,9 @@ def main():
 
         if show_controls:
             draw_controls()
+
+        if show_intro:
+            draw_introduction()
 
         pygame.display.update()
 
