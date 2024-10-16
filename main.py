@@ -27,7 +27,7 @@ if not (use_default_parameters):
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 3
-    SURVIVAL_CELL_AMOUNT = [3, 4, 5]
+    SURVIVAL_CELL_AMOUNT = [2, 3, 4]
     REPRODUCTION_CELL_AMOUNT = [3]
     ##### ##### ##### ##### ##### #####
 else:
@@ -157,11 +157,11 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
 
 def draw_statistics(statistics):
     box_position = (15, 15, (WIDTH * 0.25), (HEIGHT * 0.12))
-    pygame.draw.rect(screen, tuple(COLORS["SLATEGRAY"]), box_position)
+    pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), box_position)
     border_thickness = 10
     border_position = (5, 5, (WIDTH * 0.25 + border_thickness), (WIDTH * 0.12 + border_thickness))
-    pygame.draw.rect(screen, tuple(COLORS["YELLOW"]), border_position, border_thickness)
-    font = pygame.font.Font(None, 25)
+    pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), border_position, border_thickness)
+    font = pygame.font.Font("fonts/Minecraft.ttf", 14)
     y_offset = 25
     for name, value in statistics.items():
         text = font.render(f"{name}: {value}", True, tuple(COLORS["BLACK"]))
@@ -170,20 +170,31 @@ def draw_statistics(statistics):
 
 def draw_controls():
     controls = {
-        "Toggle Controls:": "        T",
-        "Pause/Play:": "             Space",
-        "Generate:": "                    G",
-        "Clear Board:": "                C",
-        "Toggle Grid:": "                H",
-        "Toggle Stats:": "               S"
+        "Toggle Controls:": "       T",
+        "Pause/Play:": "         Space",
+        "Generate:": "                G",
+        "Clear Board:": "            C",
+        "Toggle Grid:": "             H",
+        "Toggle Stats:": "            S"
     }
 
+    font = pygame.font.Font("fonts/Minecraft.ttf", 25)
+    # Title Box
+    tbox_position = ()
+    pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), tbox_position)
+    tborder_thickness = 5
+    tborder_position = ()
+    pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), tborder_position, tborder_thickness)
+    title = font.render("Controls", True, tuple(COLORS["BLACK"]))
+    screen.blit(title, ())
+
+    # Main Box
     box_position = (WIDTH / 3, HEIGHT / 3, (WIDTH * 0.33), (HEIGHT * 0.2))
-    pygame.draw.rect(screen, tuple(COLORS["SLATEGRAY"]), box_position)
+    pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), box_position)
     border_thickness = 10
     border_position = (WIDTH / 3 - border_thickness, HEIGHT / 3 - border_thickness, (WIDTH * 0.33 + border_thickness), (WIDTH * 0.2 + border_thickness))
-    pygame.draw.rect(screen, tuple(COLORS["YELLOW"]), border_position, border_thickness)
-    font = pygame.font.Font("/fonts/Mario-Kart_DS.ttf", 35)
+    pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), border_position, border_thickness)
+    font = pygame.font.Font("fonts/Minecraft.ttf", 25)
     y_offset = HEIGHT / 3 + 10
     for control, value in controls.items():
         text = font.render(f"{control} {value}", True, tuple(COLORS["BLACK"]))
