@@ -1,6 +1,7 @@
 {
     "__note": "Custom Colors",
     "LINE_COLOR": [20, 20, 20],
+    "LINE_COLOR2": [0, 0, 0],
     
     "__note": "Basic Colors",
     "BLACK": [0, 0, 0],
