@@ -200,6 +200,9 @@ def draw_controls():
         text = font.render(f"{control} {value}", True, tuple(COLORS["BLACK"]))
         screen.blit(text, (WIDTH / 3 + 10, y_offset))
         y_offset += 30
+
+def draw_introduction():
+    pass
     
 
 def main():
