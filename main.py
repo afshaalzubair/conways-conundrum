@@ -28,7 +28,7 @@ if not (use_default_parameters):
     UPDATE_FREQ = 1
     MAX_AGE = 3
     SURVIVAL_CELL_AMOUNT = [2, 3]
-    REPRODUCTION_CELL_AMOUNT = [3]
+    REPRODUCTION_CELL_AMOUNT = [3, 4]
     ##### ##### ##### ##### ##### #####
 else:
     #####    DEFAULT PARAMETERS   #####
@@ -139,12 +139,40 @@ def get_neighbors(pos):
 
     return neighbors
 
+def calculate_statistics(positions, generation_count, previous_live_cell_count):
+    num_live_cells = len(positions)
+    population_density = num_live_cells / (GRID_WIDTH * GRID_HEIGHT)
+    average_age = sum(positions.values()) / num_live_cells if num_live_cells > 0 else 0
+    survival_rate = (num_live_cells / previous_live_cell_count) * 100 if previous_live_cell_count > 0 else 0
+    
+    statistics = {
+        "Generation": generation_count,
+        "Live Cells": num_live_cells,
+        "Population Density": f"{population_density:.2}%",
+        "Average Age": f"{average_age:.2f} Gens",
+        "Survival Rate": f"{survival_rate:.2f}%"
+    }
+
+    return statistics
+
+def draw_statistics(statistics):
+    font = pygame.font.Font(None, 25)
+    y_offset = 10
+    for name, value in statistics.items():
+        text = font.render(f"{name}: {value}", True, tuple(COLORS["PERU"]))
+        screen.blit(text, (10, y_offset))
+        y_offset += 20
+
 def main():
     running = True
     playing = False
     show_grid = True
+    show_stats = False
     count = 0
     positions = {}
+
+    generation = 0
+    previous_live_cell_count = 0
 
     while running:
         clock.tick(FPS)
@@ -154,7 +182,9 @@ def main():
 
         if count >= UPDATE_FREQ:
             count = 0
+            previous_live_cell_count = len(positions)
             positions = adjust_grid(positions)
+            generation += 1
 
         pygame.display.set_caption("Playing" if playing else "Paused")
 
@@ -183,6 +213,7 @@ def main():
                     positions = {}
                     playing = False
                     count = 0
+                    generation = 0
 
                 # Press g to generate cells
                 if event.key == pygame.K_g:
@@ -192,8 +223,16 @@ def main():
                 if event.key == pygame.K_h:
                     show_grid = not show_grid
 
+                # Press s to toggle game statistics on/off
+                if event.key == pygame.K_s:
+                    show_stats = not show_stats
+        
         screen.fill(BG_COLOR)
         draw_grid(positions, show_grid)
+        if show_stats:
+            statistics = calculate_statistics(positions, generation, previous_live_cell_count)
+            draw_statistics(statistics)
+
         pygame.display.update()
 
     pygame.quit()
