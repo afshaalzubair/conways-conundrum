@@ -148,7 +148,7 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
     statistics = {
         "Generation": generation_count,
         "Live Cells": num_live_cells,
-        "Population Density": f"{population_density:.2}%",
+        "Population Density": f"{population_density:.2%}",
         "Average Age": f"{average_age:.2f} Gens",
         "Survival Rate": f"{survival_rate:.2f}%"
     }
@@ -156,29 +156,39 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
     return statistics
 
 def draw_statistics(statistics):
-    pygame.draw.rect(screen, tuple(COLORS["SLATEGRAY"]), (0, 0, (WIDTH * 0.25), (HEIGHT * 0.12)))
+    box_position = (15, 15, (WIDTH * 0.25), (HEIGHT * 0.12))
+    pygame.draw.rect(screen, tuple(COLORS["SLATEGRAY"]), box_position)
+    border_thickness = 10
+    border_position = (5, 5, (WIDTH * 0.25 + border_thickness), (WIDTH * 0.12 + border_thickness))
+    pygame.draw.rect(screen, tuple(COLORS["YELLOW"]), border_position, border_thickness)
     font = pygame.font.Font(None, 25)
-    y_offset = 10
+    y_offset = 25
     for name, value in statistics.items():
         text = font.render(f"{name}: {value}", True, tuple(COLORS["BLACK"]))
-        screen.blit(text, (10, y_offset))
+        screen.blit(text, (25, y_offset))
         y_offset += 20
 
 def draw_controls():
     controls = {
-        "Pause/Play": "Space",
-        "Clear Board": "C",
-        "Generate": "G",
-        "Toggle Grid": "H",
-        "Toggle Stats": "S"
+        "Toggle Controls:": "        T",
+        "Pause/Play:": "             Space",
+        "Generate:": "                    G",
+        "Clear Board:": "                C",
+        "Toggle Grid:": "                H",
+        "Toggle Stats:": "               S"
     }
 
-    font = pygame.font.Font(None, 35)
-    y_offset = 10
+    box_position = (WIDTH / 3, HEIGHT / 3, (WIDTH * 0.33), (HEIGHT * 0.2))
+    pygame.draw.rect(screen, tuple(COLORS["SLATEGRAY"]), box_position)
+    border_thickness = 10
+    border_position = (WIDTH / 3 - border_thickness, HEIGHT / 3 - border_thickness, (WIDTH * 0.33 + border_thickness), (WIDTH * 0.2 + border_thickness))
+    pygame.draw.rect(screen, tuple(COLORS["YELLOW"]), border_position, border_thickness)
+    font = pygame.font.Font("/fonts/Mario-Kart_DS.ttf", 35)
+    y_offset = HEIGHT / 3 + 10
     for control, value in controls.items():
-        text = font.render(f"{control}: {value}", True, tuple(COLORS["BLACK"]))
-        screen.blit(text, (10, y_offset))
-        y_offset += 20
+        text = font.render(f"{control} {value}", True, tuple(COLORS["BLACK"]))
+        screen.blit(text, (WIDTH / 3 + 10, y_offset))
+        y_offset += 30
     
 
 def main():
@@ -186,6 +196,7 @@ def main():
     playing = False
     show_grid = True
     show_stats = False
+    show_controls = True
     count = 0
     positions = {}
 
@@ -236,6 +247,7 @@ def main():
                 # Press g to generate cells
                 if event.key == pygame.K_g:
                     positions = generate(GENERATION_RANDOMNESS * GRID_WIDTH)
+                    generation = 0
 
                 # Press h to toggle grid on/off
                 if event.key == pygame.K_h:
@@ -244,12 +256,19 @@ def main():
                 # Press s to toggle game statistics on/off
                 if event.key == pygame.K_s:
                     show_stats = not show_stats
+
+                if event.key == pygame.K_t:
+                    show_controls = not show_controls
         
         screen.fill(BG_COLOR)
         draw_grid(positions, show_grid)
+
         if show_stats:
             statistics = calculate_statistics(positions, generation, previous_live_cell_count)
             draw_statistics(statistics)
+
+        if show_controls:
+            draw_controls()
 
         pygame.display.update()
 
