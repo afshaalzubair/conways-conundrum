@@ -164,6 +164,23 @@ def draw_statistics(statistics):
         screen.blit(text, (10, y_offset))
         y_offset += 20
 
+def draw_controls():
+    controls = {
+        "Pause/Play": "Space",
+        "Clear Board": "C",
+        "Generate": "G",
+        "Toggle Grid": "H",
+        "Toggle Stats": "S"
+    }
+
+    font = pygame.font.Font(None, 35)
+    y_offset = 10
+    for control, value in controls.items():
+        text = font.render(f"{control}: {value}", True, tuple(COLORS["BLACK"]))
+        screen.blit(text, (10, y_offset))
+        y_offset += 20
+    
+
 def main():
     running = True
     playing = False
