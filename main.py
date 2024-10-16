@@ -22,8 +22,8 @@ use_default_parameters = False
 
 if not (use_default_parameters):
     ##### EXPERIMENTAL PARAMETERS #####
-    WIDTH, HEIGHT = 1002, 1002
-    TILE_SIZE = 3
+    WIDTH, HEIGHT = 1000, 1000
+    TILE_SIZE = 5
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 3
@@ -47,7 +47,8 @@ LINE_COLOR = tuple(COLORS["LINE_COLOR"])
 BG_COLOR = tuple(COLORS["BLACK"])
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
-GENERATION_RANDOMNESS = random.randrange(int((0.1 * ((WIDTH + HEIGHT) / 2))), int((0.2 * ((WIDTH + HEIGHT) / 2))))
+TOTAL_CELLS = GRID_WIDTH * GRID_HEIGHT
+GENERATION_RANDOMNESS = random.randrange(int(TOTAL_CELLS * 0.2), int(TOTAL_CELLS * 0.3))
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -56,7 +57,7 @@ def get_color(age):
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
     young_color = tuple(COLORS["BLACK"])
-    old_color = rainbow
+    old_color = tuple(COLORS["WHITE"])
 
     age = min(age, MAX_AGE)
 
@@ -333,7 +334,7 @@ def main():
 
                 # Press g to generate cells
                 if event.key == pygame.K_g:
-                    positions = generate(GENERATION_RANDOMNESS * GRID_WIDTH)
+                    positions = generate(GENERATION_RANDOMNESS)
                     generation = 0
 
                 # Press h to toggle grid on/off
