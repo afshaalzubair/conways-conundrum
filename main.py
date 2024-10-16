@@ -175,31 +175,59 @@ def draw_controls():
         "Generate:": "                G",
         "Clear Board:": "            C",
         "Toggle Grid:": "             H",
-        "Toggle Stats:": "            S"
-        # add toggle intro menu
+        "Toggle Stats:": "            S",
+        "Toggle Intro:": "            E"
     }
 
-    font = pygame.font.Font("fonts/Minecraft.ttf", 25)
     # Title Box
-    tbox_position = ()
+    tbox_x = (WIDTH / 3 + 80)
+    tbox_y = (HEIGHT / 3 - 70)
+    tbox_width = (WIDTH * 0.166)
+    tbox_height = (HEIGHT * 0.05)
+    tbox_position = (tbox_x, tbox_y, tbox_width, tbox_height)
     pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), tbox_position)
+
+    # Title Border
     tborder_thickness = 5
-    tborder_position = ()
+    tborder_position = (
+        tbox_x - tborder_thickness,
+        tbox_y - tborder_thickness,
+        tbox_width + tborder_thickness,
+        tbox_height + tborder_thickness
+    )
     pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), tborder_position, tborder_thickness)
+
+    # Title Text
+    font_size = 30
+    font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
     title = font.render("Controls", True, tuple(COLORS["BLACK"]))
-    screen.blit(title, ())
+    screen.blit(title, (tbox_x + 20, tbox_y + 10))
 
     # Main Box
-    box_position = (WIDTH / 3, HEIGHT / 3, (WIDTH * 0.33), (HEIGHT * 0.2))
+    box_x = (WIDTH / 3)
+    box_y = (HEIGHT / 3)
+    box_width = (WIDTH * 0.33)
+    box_height = (HEIGHT * 0.23)
+    box_position = (box_x, box_y, box_width, box_height)
     pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), box_position)
+
+    # Main Border
     border_thickness = 10
-    border_position = (WIDTH / 3 - border_thickness, HEIGHT / 3 - border_thickness, (WIDTH * 0.33 + border_thickness), (WIDTH * 0.2 + border_thickness))
+    border_position = (
+        box_x - border_thickness,
+        box_y - border_thickness,
+        box_width + border_thickness,
+        box_height + border_thickness
+    )
     pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), border_position, border_thickness)
-    font = pygame.font.Font("fonts/Minecraft.ttf", 25)
-    y_offset = HEIGHT / 3 + 10
+    
+    # Main Text
+    font_size = 25
+    font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
+    y_offset = box_y + 10
     for control, value in controls.items():
         text = font.render(f"{control} {value}", True, tuple(COLORS["BLACK"]))
-        screen.blit(text, (WIDTH / 3 + 10, y_offset))
+        screen.blit(text, (box_x + 10, y_offset))
         y_offset += 30
 
 def draw_introduction():
