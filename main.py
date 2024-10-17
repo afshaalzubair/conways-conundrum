@@ -23,12 +23,13 @@ use_default_parameters = False
 if not (use_default_parameters):
     ##### EXPERIMENTAL PARAMETERS #####
     WIDTH, HEIGHT = 1000, 1000
-    TILE_SIZE = 5
+    TILE_SIZE = 2
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 3
     SURVIVAL_CELL_AMOUNT = [2, 3]
     REPRODUCTION_CELL_AMOUNT = [3]
+    AGE_DEATH = False
     ##### ##### ##### ##### ##### #####
 else:
     #####    DEFAULT PARAMETERS   #####
@@ -40,6 +41,7 @@ else:
     MAX_AGE = DEF_PARAMS["MAX_AGE"]
     SURVIVAL_CELL_AMOUNT = tuple(DEF_PARAMS["SURVIVAL_CELL_AMOUNT"])
     REPRODUCTION_CELL_AMOUNT = tuple(DEF_PARAMS["REPRODUCTION_CELL_AMOUNT"])
+    AGE_DEATH = DEF_PARAMS["AGE_DEATH"]
     ##### ##### ##### ##### ##### #####
 
 # CONTROL PARAMETERS
@@ -92,9 +94,15 @@ def adjust_grid(positions):
     all_neighbors = set()
     # Updated after adjust_grid, stores positions and age of the cells that need to be updated after cycle
     new_positions = {}
+            
 
     # Loop through the position and age of all live cells
     for position, age in positions.items(): 
+
+        # Skip cells that have reached max age, (they die)
+        if (AGE_DEATH and age >= MAX_AGE):
+            continue
+
         # Get neighboring coordinates
         neighbors = get_neighbors(position)
         # Add set of coordinates to all_neighbors
