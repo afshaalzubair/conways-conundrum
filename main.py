@@ -26,10 +26,10 @@ if not (use_default_parameters):
     TILE_SIZE = 2
     FPS = 60 
     UPDATE_FREQ = 1
-    MAX_AGE = 5
-    SURVIVAL_CELL_AMOUNT = [2, 3]
-    REPRODUCTION_CELL_AMOUNT = [3]
-    AGE_DEATH = False
+    MAX_AGE = 10
+    SURVIVAL_CELL_AMOUNT = [4,5,6,7,8]
+    REPRODUCTION_CELL_AMOUNT = [3, 4]
+    AGE_DEATH = True
     ##### ##### ##### ##### ##### #####
 else:
     #####    DEFAULT PARAMETERS   #####
@@ -59,7 +59,7 @@ def get_color(age):
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
     young_color = tuple(COLORS["BLACK"])
-    old_color = tuple(COLORS["WHITE"])
+    old_color = tuple(COLORS["ORCHID"])
 
     age = min(age, MAX_AGE)
 
