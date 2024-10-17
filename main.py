@@ -26,7 +26,7 @@ if not (use_default_parameters):
     TILE_SIZE = 2
     FPS = 60 
     UPDATE_FREQ = 1
-    MAX_AGE = 3
+    MAX_AGE = 5
     SURVIVAL_CELL_AMOUNT = [2, 3]
     REPRODUCTION_CELL_AMOUNT = [3]
     AGE_DEATH = False
