@@ -59,7 +59,7 @@ def get_color(age):
     rainbow = (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255))
 
     young_color = tuple(COLORS["BLACK"])
-    old_color = tuple(COLORS["ORCHID"])
+    old_color = tuple(COLORS["CHOCOLATE"])
 
     age = min(age, MAX_AGE)
 
@@ -94,7 +94,6 @@ def adjust_grid(positions):
     all_neighbors = set()
     # Updated after adjust_grid, stores positions and age of the cells that need to be updated after cycle
     new_positions = {}
-            
 
     # Loop through the position and age of all live cells
     for position, age in positions.items(): 
@@ -283,7 +282,54 @@ def draw_controls():
         y_offset += 30
 
 def draw_introduction():
-    pass
+    # Title Box
+    tbox_x = (WIDTH / 4)
+    tbox_y = (HEIGHT / 4)
+    tbox_width = (WIDTH * 0.5)
+    tbox_height = (HEIGHT * 0.2)
+    tbox_position = (tbox_x, tbox_y, tbox_width, tbox_height)
+    pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), tbox_position)
+
+    # Title Border
+    tborder_thickness = 10
+    tborder_position = (
+        tbox_x - tborder_thickness,
+        tbox_y - tborder_thickness,
+        tbox_width + tborder_thickness,
+        tbox_height + tborder_thickness
+    )
+    pygame.draw.rect(screen, tuple(COLORS["REBECCAPURPLE"]), tborder_position, tborder_thickness)
+
+    # Title Text
+    text = (
+        "           Welcome to:", 
+        "Conway's Conundrum!", 
+        "                     A twist on the famous", 
+        " Conway's Game of Life",
+        "E to Close, T for Controls"
+    )
+
+    x_offset = tbox_x + 65
+    y_offset = tbox_y + 35
+
+    for i, item in enumerate(text):
+        color = tuple(COLORS["VIOLET"]) if i == 1 else tuple(COLORS["BLACK"])   
+
+        if (i == 1):
+            font_size = 35
+        elif (i == 2):
+            font_size = 15
+        elif (i == 4):
+            font_size = 10
+            x_offset -= 55
+        else:
+            font_size = 30
+            y_offset -= 10
+
+        font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
+        print = font.render(f"{item}", True, color)
+        screen.blit(print, (x_offset, y_offset))
+        y_offset += 40
     
 
 def main():
