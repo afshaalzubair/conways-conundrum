@@ -16,3 +16,4 @@ Completed features:
 - ~~Openable controls menu~~
 - ~~Openable interactive statistics menu~~
 - ~~Cell death from aging~~
+- ~~Openable introduction panel~~
