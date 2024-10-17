@@ -7,5 +7,6 @@
     "UPDATE_FREQ": 30,
     "MAX_AGE": 10,
     "SURVIVAL_CELL_AMOUNT": [2, 3],
-    "REPRODUCTION_CELL_AMOUNT": [3]
+    "REPRODUCTION_CELL_AMOUNT": [3],
+    "AGE_DEATH": false
 }
