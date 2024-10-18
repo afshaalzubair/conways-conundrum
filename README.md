@@ -1,4 +1,4 @@
-# conways-game-of-life
+# conways-conundrum
 
 List of features to add:
 - Openable rules/explanation menu explaining the basics of CGOL
