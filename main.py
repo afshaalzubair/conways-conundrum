@@ -164,6 +164,67 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
 
     return statistics
 
+def handle_events(running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            col = x // TILE_SIZE
+            row = y // TILE_SIZE
+            pos = (col, row)
+
+            if pos in positions:
+                del positions[pos]
+            else:
+                positions[pos] = 1
+
+        if event.type == pygame.KEYDOWN:
+            # Press space to pause/play
+            if event.key == pygame.K_SPACE:
+                playing = not playing
+
+            # Press c to clear board
+            if event.key == pygame.K_c:
+                positions = {}
+                playing = False
+                count = 0
+                generation = 0
+
+            # Press g to generate cells
+            if event.key == pygame.K_g:
+                positions = generate(GENERATION_RANDOMNESS)
+                generation = 0
+
+            # Press h to toggle grid on/off
+            if event.key == pygame.K_h:
+                show_grid = not show_grid
+
+            # Press s to toggle game statistics panel
+            if event.key == pygame.K_s:
+                show_stats = not show_stats
+
+            # Press t to toggle controls menu
+            if event.key == pygame.K_t:
+                show_controls = not show_controls
+
+            # Press e to toggle intro menu
+            if event.key == pygame.K_e:
+                show_intro = not show_intro
+
+    return running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count
+
+def manage_panels(show_stats, show_controls, show_intro, statistics):
+    if show_stats:
+        draw_statistics(statistics)
+
+    if show_controls:
+        draw_controls()
+
+    if show_intro:
+        draw_introduction()
+
 def draw_statistics(statistics):
 
     # Title Box
@@ -359,66 +420,14 @@ def main():
 
         pygame.display.set_caption("Conway's Game of Life - Playing" if playing else "Conways Game of Life - Paused")
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                col = x // TILE_SIZE
-                row = y // TILE_SIZE
-                pos = (col, row)
-
-                if pos in positions:
-                    del positions[pos]
-                else:
-                    positions[pos] = 1
-
-            if event.type == pygame.KEYDOWN:
-                # Press space to pause/play
-                if event.key == pygame.K_SPACE:
-                    playing = not playing
-                
-                # Press c to clear board
-                if event.key == pygame.K_c:
-                    positions = {}
-                    playing = False
-                    count = 0
-                    generation = 0
-
-                # Press g to generate cells
-                if event.key == pygame.K_g:
-                    positions = generate(GENERATION_RANDOMNESS)
-                    generation = 0
-
-                # Press h to toggle grid on/off
-                if event.key == pygame.K_h:
-                    show_grid = not show_grid
-
-                # Press s to toggle game statistics panel
-                if event.key == pygame.K_s:
-                    show_stats = not show_stats
-
-                # Press t to toggle controls menu
-                if event.key == pygame.K_t:
-                    show_controls = not show_controls
-
-                # Press e to toggle intro menu
-                if event.key == pygame.K_e:
-                    show_intro = not show_intro
+        running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count = handle_events(
+            running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count
+        )
         
         screen.fill(BG_COLOR)
         draw_grid(positions, show_grid)
-
-        if show_stats:
-            statistics = calculate_statistics(positions, generation, previous_live_cell_count)
-            draw_statistics(statistics)
-
-        if show_controls:
-            draw_controls()
-
-        if show_intro:
-            draw_introduction()
+        statistics = calculate_statistics(positions, generation, previous_live_cell_count)
+        manage_panels(show_stats, show_controls, show_intro, statistics)
 
         pygame.display.update()
 
