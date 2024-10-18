@@ -418,7 +418,7 @@ def main():
             positions = adjust_grid(positions)
             generation += 1
 
-        pygame.display.set_caption("Conway's Game of Life - Playing" if playing else "Conways Game of Life - Paused")
+        pygame.display.set_caption("Conway's Conundrum - Playing" if playing else "Conway's Conundrum - Paused")
 
         running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count = handle_events(
             running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count
