@@ -391,7 +391,9 @@ def draw_introduction():
         print = font.render(f"{item}", True, color)
         screen.blit(print, (x_offset, y_offset))
         y_offset += 40
-    
+
+    rules = pygame.image.load("assets/conways conundrum rules.png").convert_alpha()
+    screen.blit(rules, (tbox_x + 45, tbox_y + 210))
 
 def main():
     running = True
