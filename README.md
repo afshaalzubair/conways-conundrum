@@ -1,7 +1,6 @@
 # conways-conundrum
 
 List of features to add:
-- Openable rules/explanation menu explaining the basics of CGOL
 - Ability for user to set experimental parameters
     - Speed control to change the update_freq parameter
     - Customizable grid size
@@ -17,3 +16,4 @@ Completed features:
 - ~~Openable interactive statistics menu~~
 - ~~Cell death from aging~~
 - ~~Openable introduction panel~~
+- ~~Openable rules/explanation menu explaining the basics of CGOL~~
