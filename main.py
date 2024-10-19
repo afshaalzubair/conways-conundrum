@@ -156,6 +156,10 @@ def get_neighbors(pos):
 def save_statistics_plot():
     if not statistics_history:
         return
+    
+    # Add more plot data for:
+    # Generation - Average Age
+    # Generation - Population Density
 
     generations = [stat["Generation"] for stat in statistics_history]
     live_cells = [stat["Live Cells"] for stat in statistics_history]
