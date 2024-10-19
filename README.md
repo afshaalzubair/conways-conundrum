@@ -17,3 +17,5 @@ Completed features:
 - ~~Cell death from aging~~
 - ~~Openable introduction panel~~
 - ~~Openable rules/explanation menu explaining the basics of CGOL~~
+- ~~Saveable screenshot~~
+- ~~Saveable plot statistics data~~
