@@ -1,6 +1,7 @@
 import pygame
 import random
 import json
+import os
 import matplotlib.pyplot as plt
 import time
 from datetime import datetime
@@ -156,30 +157,63 @@ def get_neighbors(pos):
 def save_statistics_plot():
     if not statistics_history:
         return
-    
-    # Add more plot data for:
-    # Generation - Average Age
-    # Generation - Population Density
+
+    base_dir = "saved_statistics"
+
+    if not os.path.exists(base_dir):
+        os.makedirs(base_dir)
+        
+    stats_dir = os.path.join(base_dir, f'statistics_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+
+    if not os.path.exists(stats_dir):
+        os.makedirs(stats_dir)
+
+    parameters_text = f"Parameters: WIDTH={WIDTH}, HEIGHT={HEIGHT}, TILE_SIZE={TILE_SIZE}, UPDATE_FREQ={UPDATE_FREQ}, MAX_AGE={MAX_AGE}, SURVIVAL={SURVIVAL_CELL_AMOUNT}, REPRODUCTION={REPRODUCTION_CELL_AMOUNT}, AGE_DEATH={AGE_DEATH}"
 
     generations = [stat["Generation"] for stat in statistics_history]
     live_cells = [stat["Live Cells"] for stat in statistics_history]
+    population_density = [stat["Population Density"] for stat in statistics_history]
+    average_age = [stat["Average Age"] for stat in statistics_history]
 
+    # Plot 1: Generation - Live Cells
     plt.figure(figsize=(10, 5))
-    plt.plot(generations, live_cells, label="Live Cells Over Time", color="purple", linewidth=2)
-
+    plt.plot(generations, live_cells, label="Live Cells Over Time", color="red", linewidth=2)
     plt.title("Conway's Conundrum - Live Cells Over Time")
     plt.xlabel("Generation")
     plt.ylabel("Live Cells")
     plt.legend()
-
-    parameters_text = f"Parameters: WIDTH={WIDTH}, HEIGHT={HEIGHT}, TILE_SIZE={TILE_SIZE}, UPDATE_FREQ={UPDATE_FREQ}, MAX_AGE={MAX_AGE}, SURVIVAL={SURVIVAL_CELL_AMOUNT}, REPRODUCTION={REPRODUCTION_CELL_AMOUNT}, AGE_DEATH={AGE_DEATH}"
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
-
-    statistics_filename = f"game_statistics/statistics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-    screenshot_filename = f"images/screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-    plt.savefig(statistics_filename)
-    pygame.image.save(screen, screenshot_filename)
+    live_cells_filename = os.path.join(stats_dir, 'live_cells_over_time.png')
+    plt.savefig(os.path.join(stats_dir, 'live_cells_over_time.png'))
     plt.close()
+
+    # Plot 2: Generation - Population Density
+    plt.figure(figsize=(10, 5))
+    plt.plot(generations, population_density, label="Population Density Over Time", color="green", linewidth=2)
+    plt.title("Conway's Conundrum - Population Density Over Time")
+    plt.xlabel("Generation")
+    plt.ylabel("Population Density")
+    plt.legend()
+    plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
+    population_density_filename = os.path.join(stats_dir, 'population_density_over_time.png')
+    plt.savefig(os.path.join(stats_dir, 'population_density_over_time.png'))
+    plt.close()
+
+    # Plot 3: Generation - Average Age
+    plt.figure(figsize=(10, 5))
+    plt.plot(generations, average_age, label="Average Age Over Time", color="blue", linewidth=2)
+    plt.title("Conway's Conundrum - Average Cell Age Over Time")
+    plt.xlabel("Generation")
+    plt.ylabel("Average Age")
+    plt.legend()
+    plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
+    average_age_filename = os.path.join(stats_dir, 'average_age_over_time.png')
+    plt.savefig(os.path.join(stats_dir, 'average_age_over_time.png'))
+    plt.close()
+
+    screenshot_filename = f'images/screenshots/screenshot_{datetime.now().strftime("%Y%m%d_%H%M%S")}.png'
+    pygame.image.save(screen, screenshot_filename)
+
     display_message("Data + Screenshot Saved", duration=2)
 
 def display_message(message, duration=2):
