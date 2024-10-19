@@ -1,6 +1,9 @@
 import pygame
 import random
 import json
+import matplotlib.pyplot as plt
+import time
+from datetime import datetime
 
 """
 Rules of Conway's Game of Life:
@@ -23,7 +26,7 @@ use_default_parameters = False
 if not (use_default_parameters):
     ##### EXPERIMENTAL PARAMETERS #####
     WIDTH, HEIGHT = 1000, 1000
-    TILE_SIZE = 2
+    TILE_SIZE = 5
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 10
@@ -51,6 +54,9 @@ GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
 TOTAL_CELLS = GRID_WIDTH * GRID_HEIGHT
 GENERATION_RANDOMNESS = random.randrange(int(TOTAL_CELLS * 0.2), int(TOTAL_CELLS * 0.3))
+
+# STATISTICS TRACKER
+statistics_history = []
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -147,6 +153,42 @@ def get_neighbors(pos):
 
     return neighbors
 
+def save_statistics_plot():
+    if not statistics_history:
+        return
+
+    generations = [stat["Generation"] for stat in statistics_history]
+    live_cells = [stat["Live Cells"] for stat in statistics_history]
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(generations, live_cells, label="Live Cells Over Time", color="purple", linewidth=2)
+
+    plt.title("Conway's Conundrum - Live Cells Over Time")
+    plt.xlabel("Generation")
+    plt.ylabel("Live Cells")
+    plt.legend()
+
+    parameters_text = f"Parameters: WIDTH={WIDTH}, HEIGHT={HEIGHT}, TILE_SIZE={TILE_SIZE}, UPDATE_FREQ={UPDATE_FREQ}, MAX_AGE={MAX_AGE}, SURVIVAL={SURVIVAL_CELL_AMOUNT}, REPRODUCTION={REPRODUCTION_CELL_AMOUNT}, AGE_DEATH={AGE_DEATH}"
+    plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
+
+    statistics_filename = f"game_statistics/statistics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+    screenshot_filename = 
+    plt.savefig(statistics_filename)
+    plt.close()
+    display_message("Data Saved", duration=2)
+
+def display_message(message, duration=2):
+    font_size = 40
+    font = pygame.font.Font("fonts/Minecraft.ttf", font_size)
+    text = font.render(message, True, tuple(COLORS["RED"]))
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        screen.blit(text, text_rect)
+        pygame.display.update()
+        clock.tick(FPS)
+
 def calculate_statistics(positions, generation_count, previous_live_cell_count):
     num_live_cells = len(positions)
     population_density = num_live_cells / (GRID_WIDTH * GRID_HEIGHT)
@@ -162,6 +204,7 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
         "Survival Rate": f"{survival_rate:.2f}%"
     }
 
+    statistics_history.append(statistics)
     return statistics
 
 def handle_events(running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count):
@@ -212,6 +255,10 @@ def handle_events(running, playing, show_grid, show_stats, show_controls, show_i
             # Press e to toggle intro menu
             if event.key == pygame.K_e:
                 show_intro = not show_intro
+
+            # Press x to save statistics plot
+            if event.key == pygame.K_x:
+                save_statistics_plot()
 
     return running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count
 
