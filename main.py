@@ -26,7 +26,7 @@ use_default_parameters = False
 if not (use_default_parameters):
     ##### EXPERIMENTAL PARAMETERS #####
     WIDTH, HEIGHT = 1000, 1000
-    TILE_SIZE = 5
+    TILE_SIZE = 2
     FPS = 60 
     UPDATE_FREQ = 1
     MAX_AGE = 10
@@ -172,10 +172,11 @@ def save_statistics_plot():
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
 
     statistics_filename = f"game_statistics/statistics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-    screenshot_filename = 
+    screenshot_filename = f"images/screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
     plt.savefig(statistics_filename)
+    pygame.image.save(screen, screenshot_filename)
     plt.close()
-    display_message("Data Saved", duration=2)
+    display_message("Data + Screenshot Saved", duration=2)
 
 def display_message(message, duration=2):
     font_size = 40
