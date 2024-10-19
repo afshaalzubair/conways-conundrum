@@ -194,7 +194,8 @@ def save_statistics_plot():
     plt.plot(generations, population_density, label="Population Density Over Time", color="green", linewidth=2)
     plt.title("Conway's Conundrum - Population Density Over Time")
     plt.xlabel("Generation")
-    plt.ylabel("Population Density")
+    plt.ylabel("Population Density (%)")
+    plt.yticks([i / 100.0 for i in range(0, 101, 10)], [f'{i}%' for i in range(0, 101, 10)])
     plt.legend()
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
     population_density_filename = os.path.join(stats_dir, 'population_density_over_time.png')
@@ -206,7 +207,7 @@ def save_statistics_plot():
     plt.plot(generations, average_age, label="Average Age Over Time", color="blue", linewidth=2)
     plt.title("Conway's Conundrum - Average Cell Age Over Time")
     plt.xlabel("Generation")
-    plt.ylabel("Average Age")
+    plt.ylabel("Average Age (Gens)")
     plt.legend()
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
     average_age_filename = os.path.join(stats_dir, 'average_age_over_time.png')
@@ -247,7 +248,15 @@ def calculate_statistics(positions, generation_count, previous_live_cell_count):
         "Survival Rate": f"{survival_rate:.2f}%"
     }
 
-    statistics_history.append(statistics)
+    display_statistics = {
+        "Generation": generation_count,
+        "Live Cells": num_live_cells,
+        "Population Density": population_density,
+        "Average Age": average_age, 
+        "Survival Rate": f"{survival_rate:.2f}%"
+    }
+
+    statistics_history.append(display_statistics)
     return statistics
 
 def handle_events(running, playing, show_grid, show_stats, show_controls, show_intro, positions, generation, count):
