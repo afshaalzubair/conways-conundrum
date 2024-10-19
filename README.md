@@ -2,11 +2,6 @@
 
 List of features to add:
 - Ability for user to set experimental parameters
-    - Speed control to change the update_freq parameter
-    - Customizable grid size
-    - Cell maximum age
-    - Nearby live cell amount to keep cell (1-8)
-    - Generation (g) randomness
 
 Completed features:
 - ~~Color gradient and age function of cell~~
@@ -18,4 +13,4 @@ Completed features:
 - ~~Openable introduction panel~~
 - ~~Openable rules/explanation menu explaining the basics of CGOL~~
 - ~~Saveable screenshot~~
-- ~~Saveable plot statistics data~~
+- ~~Saveable plot statistics data with directory system~~
