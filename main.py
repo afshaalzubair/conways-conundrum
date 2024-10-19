@@ -162,11 +162,13 @@ def save_statistics_plot():
 
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
+        print(f"Created base directory: {base_dir}")
         
     stats_dir = os.path.join(base_dir, f'statistics_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
 
     if not os.path.exists(stats_dir):
         os.makedirs(stats_dir)
+        print(f"Created statistics directory: {stats_dir}")
 
     parameters_text = f"Parameters: WIDTH={WIDTH}, HEIGHT={HEIGHT}, TILE_SIZE={TILE_SIZE}, UPDATE_FREQ={UPDATE_FREQ}, MAX_AGE={MAX_AGE}, SURVIVAL={SURVIVAL_CELL_AMOUNT}, REPRODUCTION={REPRODUCTION_CELL_AMOUNT}, AGE_DEATH={AGE_DEATH}"
 
@@ -184,7 +186,7 @@ def save_statistics_plot():
     plt.legend()
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
     live_cells_filename = os.path.join(stats_dir, 'live_cells_over_time.png')
-    plt.savefig(os.path.join(stats_dir, 'live_cells_over_time.png'))
+    plt.savefig(live_cells_filename)
     plt.close()
 
     # Plot 2: Generation - Population Density
@@ -196,7 +198,7 @@ def save_statistics_plot():
     plt.legend()
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
     population_density_filename = os.path.join(stats_dir, 'population_density_over_time.png')
-    plt.savefig(os.path.join(stats_dir, 'population_density_over_time.png'))
+    plt.savefig(population_density_filename)
     plt.close()
 
     # Plot 3: Generation - Average Age
@@ -208,11 +210,13 @@ def save_statistics_plot():
     plt.legend()
     plt.figtext(0.5, 0.01, parameters_text, horizontalalignment='center', fontsize=8, wrap=True)
     average_age_filename = os.path.join(stats_dir, 'average_age_over_time.png')
-    plt.savefig(os.path.join(stats_dir, 'average_age_over_time.png'))
+    plt.savefig(average_age_filename)
     plt.close()
 
-    screenshot_filename = f'images/screenshots/screenshot_{datetime.now().strftime("%Y%m%d_%H%M%S")}.png'
-    pygame.image.save(screen, screenshot_filename)
+    screenshot_filename1 = f'images/screenshots/screenshot_{datetime.now().strftime("%Y%m%d_%H%M%S")}.png'
+    screenshot_filename2 = os.path.join(stats_dir, f'screenshot_{datetime.now().strftime("%Y%m%d_%H%M%S")}.png')
+    pygame.image.save(screen, screenshot_filename1)
+    pygame.image.save(screen, screenshot_filename2)
 
     display_message("Data + Screenshot Saved", duration=2)
 
