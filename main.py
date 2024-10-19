@@ -386,7 +386,8 @@ def draw_controls():
         "Clear Board:": "            C",
         "Toggle Grid:": "             H",
         "Toggle Stats:": "            S",
-        "Toggle Intro:": "            E"
+        "Toggle Intro:": "            E",
+        "Save Statistics:": "        X"
     }
 
     # Title Box
@@ -417,7 +418,7 @@ def draw_controls():
     box_x = (WIDTH / 3)
     box_y = (HEIGHT / 3)
     box_width = (WIDTH * 0.33)
-    box_height = (HEIGHT * 0.23)
+    box_height = (HEIGHT * 0.26)
     box_position = (box_x, box_y, box_width, box_height)
     pygame.draw.rect(screen, tuple(COLORS["LAVENDER"]), box_position)
 
